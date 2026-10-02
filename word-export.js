@@ -64,7 +64,7 @@ s+=p(`vc,raw = 0.53√f′c = 0.53√${num(fc)} = ${num(.53*Math.sqrt(fc),6)} kg
 s+=p(`vc = floor(vc,raw × 100)/100 = ${num(o.vc,2)} kgf/cm²。vu ${o.shearPass?'≤':'>'} vc，原碼剪力判定：${status(o.shearPass)}。`);
 s+=p('CPS 固定為 0，原碼扣除 d 計算剪力。vu 已除以約 0.85 的原碼折減因數，不是未折減的 Vu/(bd)。最小板厚檢核不能替代撓度計算。原碼對應：標號 1790 至 2000。','Small');
 s+=p('六 現行規範核對與待補算事項','Heading1',true);
-s+=p('比對依據：臺灣建築物混凝土結構設計規範 112 年版，自 113 年 1 月 1 日生效，含 113 年 2 月 19 日勘誤。本網頁規範查核日為 2026 年 10 月 1 日。');
+s+=p('比對依據：臺灣建築物混凝土結構設計規範 112 年版，自 113 年 1 月 1 日生效，含 113 年 2 月 19 日勘誤。本網頁規範查核日為 2026 年 10 月 2 日。');
 const active=o.rows.filter(x=>x.active),minOK=active.every(x=>x.provided>=generalMin),spOK=o.rows.every((x,i)=>!x.active||x.spacing<=Math.min(45,h*(o.one?(i<3?3:5):2)));
 s+=table([['項目及依據','本次數值核對','狀態'],['純 D L 組合 表5.3.1',`原碼 ${num(wu)}；兩組包絡 ${num(Math.max(wu,1.4*totalDead))} tf/m²`,wu>=1.4*totalDead?'本項符合':'原碼不足'],['一般最少筋 7.6.1 8.6.1 24.4.3',`0.0018 × 100h = ${num(generalMin)} cm²/m`,active.length?(minOK?'本項符合':'本項不足'):'待確認構造筋'],['最大間距 7.7.2 8.7.2 24.4.3',o.one?`主筋 ${num(Math.min(3*h,45))}；分布筋 ${num(Math.min(5*h,45))} cm`:`臨界截面 ${num(Math.min(2*h,45))} cm`,active.length?(spOK?'本項符合':'本項不足'):'待確認構造筋'],['剪力 φ 表21.2.1','原碼約0.85；現行一般剪力0.75','須修正重算'],['板厚及強度','梁板勁度、實際d、分析適用性等','待補資料及補算']],[2950,4650,1760]);
 s+=p('上述本項符合僅限明示數值與原碼有需求位置；不代表全部構造配筋或整片樓板符合規範。');

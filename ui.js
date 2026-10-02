@@ -11,7 +11,26 @@
  steel.querySelector('.table-wrap').before(bulk);document.getElementById('apply-spacing').addEventListener('click',()=>{const n=Number(document.getElementById('bulk-spacing').value),msg=document.getElementById('bulk-message');if(!Number.isFinite(n)||n<=0){msg.textContent='請輸入大於零的間距';return;}for(let i=0;i<6;i++)document.getElementById('spacing'+i).value=n;render();msg.textContent='已套用，仍可逐處修改';});
  document.getElementById('export-top').addEventListener('click',()=>{document.getElementById('export-word').click();const status=document.getElementById('export-status');document.getElementById('top-export-status').textContent=status.textContent;});
  document.getElementById('reset').addEventListener('click',()=>{document.getElementById('bulk-spacing').value=20;document.getElementById('bulk-message').textContent='';document.getElementById('top-export-status').textContent='';});
- const report=document.getElementById('report-meta');document.getElementById('edit-report').addEventListener('click',()=>{report.open=true;report.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});document.getElementById('report-project').focus({preventScroll:true});});
+ const report=document.getElementById('report-meta');document.getElementById('edit-report').addEventListener('click',()=>{setWorkspaceView('report');report.open=true;report.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});document.getElementById('report-project').focus({preventScroll:true});});
+
+ const bottom=document.createElement('nav');bottom.className='mobile-workspace-nav';bottom.setAttribute('aria-label','工作區切換');
+ bottom.innerHTML='<button type="button" data-view="parameters" aria-pressed="true">設計參數</button><button type="button" data-view="analysis" aria-pressed="false">分析結果</button><button type="button" data-view="report" aria-pressed="false">計算報告</button>';
+ document.body.append(bottom);
+ bottom.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>setWorkspaceView(b.dataset.view)));
+ const forward=document.createElement('button');forward.type='button';forward.className='mobile-forward';forward.textContent='查看分析結果';forward.addEventListener('click',()=>setWorkspaceView('analysis'));document.querySelector('aside').append(forward);
+ const cellLabels=['方向 / 位置','C × 10³','彎矩 |Mu| · tf·m/m','所需 As · cm²/m','原碼建議 · cm','實配間距 · cm','實配 As · cm²/m','檢核結果'];
+ document.querySelectorAll('#rows tr').forEach(row=>row.querySelectorAll('td').forEach((td,i)=>td.dataset.label=cellLabels[i]));
+ document.querySelectorAll('input[type=number]').forEach(input=>input.setAttribute('inputmode','decimal'));
+ setWorkspaceView('parameters',false);
  if(current)updateUX(current);
 })();
 function updateUX(o){const summary=document.querySelector('.summary');summary.dataset.state=o.pass?'pass':'fail';const n=o.rows.filter(x=>x.active&&!x.pass).length;document.getElementById('summary-text').textContent=o.pass?'板厚、剪力與實配鋼筋通過原碼檢核；規範核對仍有待補算事項。':`${[!o.thicknessPass?'板厚不足':'',!o.shearPass?'剪力未通過':'',n?`${n} 處配筋未通過`:''].filter(Boolean).join(' · ')}。請查看下方紅色項目。`;o.rows.forEach((x,i)=>{const row=document.getElementById('spacing'+i).closest('tr');row.classList.toggle('row-fail',!x.pass);row.classList.toggle('row-inactive',!x.active);});}
+
+function setWorkspaceView(view,scroll=true){
+ document.body.dataset.workspaceView=view;
+ document.querySelectorAll('.mobile-workspace-nav button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+ const report=document.getElementById('report-meta');
+ if(view==='report')report.open=true;
+ const forward=document.querySelector('.mobile-forward');if(forward)forward.hidden=view==='report';
+ if(scroll&&window.matchMedia('(max-width: 900px)').matches)window.scrollTo({top:0,behavior:'instant'});
+}
