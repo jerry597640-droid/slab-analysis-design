@@ -76,6 +76,7 @@ s+=p('原碼S(4,19)=15及S(13,18)=64有非平順值，均予保留。fy>4200時�
 s+=p('官方版本公告：https://www.nlma.gov.tw/ch/legislation/regsearch/6874','Small');
 s+=p('規範全文：https://www.nlma.gov.tw/uploads/files/011d9249cac7d6c5547786aa348e352a.pdf','Small');
 s+=p('條文定位：5.3.1載重；7.3.1及8.3.1板厚；7.6.1、8.6.1及24.4.3最少筋；7.7.2及8.7.2間距；21.2折減因數；22.5及22.6剪力。','Small');
+if(typeof modernReportLines==='function'){s+=p('現行規範斷面複核（獨立輸入內力）','Heading1',true);for(const line of modernReportLines())s+=p(line);}
 return s;
 }
 const prefix='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
